@@ -1,26 +1,21 @@
-import './config/instrument.js';
-import express from 'express';
-import cors from 'cors';
-import * as Sentry from "@sentry/node";
-import 'dotenv/config';
-import connectDB from './config/db.js';
-import { clerkWebhooks } from './controllers/webhooks.js';
-import bodyParser from 'body-parser';
-import serverless from 'serverless-http';
+import './config/instrument.js'
+import express from 'express'
+import cors from 'cors'
+import * as Sentry from "@sentry/node"
+import 'dotenv/config'
+import connectDB from './config/db.js'
+import { clerkWebhooks } from './controllers/webhooks.js'
 
-const app = express();
+// Initialize Express
+const app = express()
 
-// Connect to database
-await connectDB();
+//Connect to database
+await connectDB()
 
-// Middlewares
-app.use(cors());
-
-// Webhook route (raw body parser)
-app.post('/webhooks', bodyParser.raw({ type: 'application/json' }), clerkWebhooks);
-
-// Other routes
-app.use(express.json());
+//Middlewares
+app.use(cors())
+app.use(express.json())
+//Routes
 app.get('/', (req, res) => {
   res.send('API is working');
 });
@@ -28,9 +23,13 @@ app.get('/', (req, res) => {
 app.get("/debug-sentry", function mainHandler(req, res) {
   throw new Error("My first Sentry error!");
 });
+app.post('/webhooks', clerkWebhooks)
+//Port
+const PORT = process.env.PORT || 5000
 
-// Sentry error handling
 Sentry.setupExpressErrorHandler(app);
 
-// Export the serverless handler
-export const handler = serverless(app);
+
+app.listen(PORT, () => {
+  console.log(`Server is runnin on port ${PORT}`)
+})
