@@ -1,21 +1,20 @@
 import { Webhook } from "svix";
 import User from "../models/User.js";
 
-// API Controller Function to manage Clerk User with database
 export const clerkWebhooks = async (req, res) => {
   console.log("📩 Webhook endpoint hit");
   try {
     const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET)
 
-    const payload = req.body // 🔁 raw buffer
+    const payload = req.body // raw body
     const headers = {
       "svix-id": req.headers["svix-id"],
       "svix-timestamp": req.headers["svix-timestamp"],
       "svix-signature": req.headers["svix-signature"]
     }
 
-    const evt = whook.verify(payload, headers) // 🔁 verified!
-    const { data, type } = JSON.parse(payload.toString()) // 🔁 parsed after verification
+    const evt = whook.verify(payload, headers) // ✅ already parsed!
+    const { data, type } = evt; // ✅ fixed!
 
     switch (type) {
       case 'user.created': {
@@ -55,7 +54,7 @@ export const clerkWebhooks = async (req, res) => {
     }
 
   } catch (error) {
-    console.error("Webhook error:", error) // 🔁 Better error logging
+    console.error("❌ Webhook error:", error)
     res.status(400).json({ success: false, message: "Webhook Error", error: error.message })
   }
 }
