@@ -3,6 +3,7 @@ import User from "../models/User.js";
 
 // API Controller Function to manage Clerk User with database
 export const clerkWebhooks = async (req, res) => {
+  console.log("📩 Webhook endpoint hit");
   try {
     const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET)
 
