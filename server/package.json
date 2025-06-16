@@ -5,9 +5,10 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "server": "nodemon server/api/server.js",
-    "start": "node server/api/server.js"
-  },
+  "server": "nodemon server/index.js",
+  "start": "node server/index.js"
+}
+,
   "keywords": [],
   "author": "",
   "license": "ISC",
