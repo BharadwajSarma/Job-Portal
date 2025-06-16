@@ -30,4 +30,5 @@ app.get("/api/debug-sentry", function mainHandler(req, res) {
 
 Sentry.setupExpressErrorHandler(app)
 
-export const handler = serverless(app)
+export default serverless(app)
+
