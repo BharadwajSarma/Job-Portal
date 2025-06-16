@@ -1,5 +1,3 @@
-// server/api/server.js
-
 import '../config/instrument.js'
 import express from 'express'
 import cors from 'cors'
@@ -16,21 +14,20 @@ const app = express()
 await connectDB()
 
 app.use(cors())
-app.use(express.json())
 
-// Webhook route (must be under /api for Vercel)
+// Webhook route (required to be under /api in Vercel)
 app.post('/api/webhooks', bodyParser.raw({ type: 'application/json' }), clerkWebhooks)
+
+app.use(express.json())
 
 app.get('/api', (req, res) => {
   res.send('API is working')
 })
 
-app.get('/api/debug-sentry', (req, res) => {
-  throw new Error('My first Sentry error!')
+app.get("/api/debug-sentry", function mainHandler(req, res) {
+  throw new Error("My first Sentry error!")
 })
 
-// Sentry error handler
 Sentry.setupExpressErrorHandler(app)
 
-// ✅ Use default export for Vercel serverless functions
-export default serverless(app)
+export const handler = serverless(app)
