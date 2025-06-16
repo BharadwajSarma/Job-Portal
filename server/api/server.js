@@ -9,14 +9,14 @@ import bodyParser from 'body-parser'
 import serverless from 'serverless-http'
 
 const app = express()
-
-// Connect to database
+app.use(cors())
 await connectDB()
 
-app.use(cors())
-
 // Webhook route (required to be under /api in Vercel)
-app.post('/api/webhooks', bodyParser.raw({ type: 'application/json' }), clerkWebhooks)
+app.post('/api/webhooks', 
+  express.raw({ type: 'application/json' }), // Use Express 5+ native method
+  clerkWebhooks
+);
 
 app.use(express.json())
 
@@ -30,5 +30,6 @@ app.get("/api/debug-sentry", function mainHandler(req, res) {
 
 Sentry.setupExpressErrorHandler(app)
 
-export default serverless(app)
+const handler = serverless(app);
+export { handler as default };
 
