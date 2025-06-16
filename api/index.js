@@ -1,2 +1,2 @@
 // server/index.js
-import '../server/api/server.js';
+import './api/server.js';
