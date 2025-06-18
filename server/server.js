@@ -5,7 +5,7 @@ import * as Sentry from "@sentry/node"
 import 'dotenv/config'
 import connectDB from './config/db.js'
 import { clerkWebhooks } from './controllers/webhooks.js'
-import companyRoutes from './routes'
+import companyRoutes from './routes/companyRoutes.js'
 import connectCloudinary from './config/cloudinary.js'
 
 // Initialize Express
