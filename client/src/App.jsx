@@ -11,7 +11,7 @@ import ManageJobs from './pages/ManageJobs'
 import ViewApplication from './pages/ViewApplication'
 import 'quill/dist/quill.snow.css'
 import {ToastContainer,toast} from 'react-toastify';
-import 'react-toastify/dist/ReactTostify.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const{showRecruiterLogin}=useContext(AppContext)
