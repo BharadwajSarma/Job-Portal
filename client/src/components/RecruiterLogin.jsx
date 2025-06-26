@@ -2,15 +2,18 @@ import React, { useState,useContext, useEffect} from 'react'
 import { assets } from '../assets/assets'
 import {AppContext} from '../context/AppContext'
 import axios from 'axios'
+import {useNavigate} from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const RecruiterLogin = () => {
+    const navigate =useNavigate()
     const [state, setState] = useState('Login')
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
     const [image, setImage] = useState(false)
     const [isTextDataSubmited, setIsTextDataSubmited] = useState(false)
-    const {setShowRecruiterLogin,backendUrl}=useContext(AppContext)
+    const {setShowRecruiterLogin,backendUrl,setCompanyToken,setCompanyData}=useContext(AppContext)
     const onSubmitHandler = async (e) => {
         e.preventDefault()
         if (state == "Sign Up" && !isTextDataSubmited) {
@@ -21,7 +24,15 @@ const RecruiterLogin = () => {
                 const {data}=await axios.post(backendUrl + '/api/company/login',{email,password})
 
                 if(data.success){
-                    console.log(data)
+                    console.log(data);
+                    setCompanyData(data.company)
+                    setCompanyToken(data.token)
+                    localStorage.setItem('companyToken',data.token)
+                    setShowRecruiterLogin(false)
+                    navigate('/dasboard')
+                }
+                else{
+                    toast.error(data.message)
                 }
             }
 
