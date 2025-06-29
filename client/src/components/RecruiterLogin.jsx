@@ -20,7 +20,7 @@ const RecruiterLogin = () => {
             setIsTextDataSubmited(true);
         }
         try{
-            if(state==="Login"){
+            if(state === "Login"){
                 const {data}=await axios.post(backendUrl + '/api/company/login',{email,password})
 
                 if(data.success){
@@ -29,7 +29,7 @@ const RecruiterLogin = () => {
                     setCompanyToken(data.token)
                     localStorage.setItem('companyToken',data.token)
                     setShowRecruiterLogin(false)
-                    navigate('/dasboard')
+                    navigate('/dashboard')
                 }
                 else{
                     toast.error(data.message)
