@@ -2,9 +2,12 @@ import { createContext,useEffect,useState } from "react";
 import { jobsData } from "../assets/assets";
 import {ToastContainer,toast} from 'react-toastify';
 import axios from "axios";
+import { useAuth, useUser } from "@clerk/clerk-react";
 export const AppContext=createContext()
 export const AppContextProvider=(props)=>{
     const backendUrl =import.meta.env.VITE_BACKEND_URL
+    const {user} =useUser()
+    const {getToken}= useAuth()
     const[searchFilter,setSearchFilter]=useState(
         {
             title:'',
@@ -17,6 +20,8 @@ export const AppContextProvider=(props)=>{
     
     const [companyToken, setCompanyToken]=useState(null)
     const [companyData,setCompanyData]= useState(null)
+    const [userData,setUserData] = useState(null)
+    const [userApplication,setUserApplication] = useState([])
     //Function to fetch the jobs
         const fetchJobs=async()=>{
         try{
@@ -48,6 +53,23 @@ export const AppContextProvider=(props)=>{
             toast.error(error.message)
         }
     }
+    //Function to fetch Data
+    const fecthUserData = async()=>{
+        try{
+            const token =await getToken();
+            const {data} =await axios.get(backendUrl+'/api/users/user',
+                {headers:{Authorization:`Bearer ${token}`}})
+            if(data.success){
+                setUserData(data.user)
+            }
+            else{
+                toast.error(data.message)
+            }
+
+        }catch(error){
+            toast.error(error.message)
+        }
+    }
     useEffect(()=>{
         fetchJobs()
         const storedCompanyToken=localStorage.getItem('companyToken')
@@ -60,6 +82,11 @@ export const AppContextProvider=(props)=>{
             fetchCompanyData()
         }
     },[companyToken])
+    useEffect(()=>{
+        if(user){
+            fecthUserData()
+        }
+    },[user]) 
     const value={
         setSearchFilter,searchFilter,
         isSearched,setIsSearched,
@@ -67,7 +94,9 @@ export const AppContextProvider=(props)=>{
         showRecruiterLogin,setShowRecruiterLogin,
         companyToken,setCompanyToken,
         companyData,setCompanyData,
-        backendUrl
+        backendUrl,
+        userData,setUserData,
+        userApplication,setUserApplication
     }
     return(
         <AppContext.Provider value={value}>
