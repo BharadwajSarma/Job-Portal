@@ -54,7 +54,7 @@ export const AppContextProvider=(props)=>{
         }
     }
     //Function to fetch Data
-    const fecthUserData = async()=>{
+    const fetchUserData = async()=>{
         try{
             const token =await getToken();
             const {data} =await axios.get(backendUrl+'/api/users/user',
@@ -67,6 +67,26 @@ export const AppContextProvider=(props)=>{
             }
 
         }catch(error){
+            toast.error(error.message)
+        }
+    }
+
+    //Function to fetch users applied applications data
+    const fetchUserApplications =async()=>{
+        try{
+            const token =await getToken()
+
+            const {data} =await axios.get(backendUrl+'/api/users/applications',
+                {headers :{Authorization:`Bearer ${token}`}}
+            )
+            if(data.success){
+                setUserApplication(data.applications)
+            }
+            else{
+                toast.error(data.message)
+            }
+        }
+        catch(error){
             toast.error(error.message)
         }
     }
@@ -84,7 +104,8 @@ export const AppContextProvider=(props)=>{
     },[companyToken])
     useEffect(()=>{
         if(user){
-            fecthUserData()
+            fetchUserData()
+            fetchUserApplications()
         }
     },[user]) 
     const value={
@@ -96,7 +117,8 @@ export const AppContextProvider=(props)=>{
         companyData,setCompanyData,
         backendUrl,
         userData,setUserData,
-        userApplication,setUserApplication
+        userApplication,setUserApplication,
+        fetchUserData
     }
     return(
         <AppContext.Provider value={value}>
