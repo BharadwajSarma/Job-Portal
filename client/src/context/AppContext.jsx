@@ -118,7 +118,8 @@ export const AppContextProvider=(props)=>{
         backendUrl,
         userData,setUserData,
         userApplication,setUserApplication,
-        fetchUserData
+        fetchUserData,
+        fetchUserApplications,
     }
     return(
         <AppContext.Provider value={value}>
