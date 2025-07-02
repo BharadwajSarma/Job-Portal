@@ -14,57 +14,32 @@ const RecruiterLogin = () => {
     const [image, setImage] = useState(false)
     const [isTextDataSubmited, setIsTextDataSubmited] = useState(false)
     const {setShowRecruiterLogin,backendUrl,setCompanyToken,setCompanyData}=useContext(AppContext)
-   const onSubmitHandler = async (e) => {
-  e.preventDefault();
+    const onSubmitHandler = async (e) => {
+        e.preventDefault()
+        if (state == "Sign Up" && !isTextDataSubmited) {
+            setIsTextDataSubmited(true);
+        }
+        try{
+            if(state === "Login"){
+                const {data}=await axios.post(backendUrl + '/api/company/login',{email,password})
 
-  if (state === "Sign Up" && !isTextDataSubmited) {
-    setIsTextDataSubmited(true);
-    return;
-  }
+                if(data.success){
+                    console.log(data);
+                    setCompanyData(data.company)
+                    setCompanyToken(data.token)
+                    localStorage.setItem('companyToken',data.token)
+                    setShowRecruiterLogin(false)
+                    navigate('/dashboard')
+                }
+                else{
+                    toast.error(data.message)
+                }
+            }
 
-  try {
-    if (state === "Login") {
-      const { data } = await axios.post(backendUrl + '/api/company/login', { email, password });
+        }catch(error){
 
-      if (data.success) {
-        setCompanyData(data.company);
-        setCompanyToken(data.token);
-        localStorage.setItem('companyToken', data.token);
-        setShowRecruiterLogin(false);
-        navigate('/dashboard');
-      } else {
-        toast.error(data.message);
-      }
-    } 
-    // ✅ ADD THIS BLOCK
-    else if (state === "Sign Up" && isTextDataSubmited) {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("email", email);
-      formData.append("password", password);
-      formData.append("image", image);
-
-      const { data } = await axios.post(backendUrl + '/api/company/register', formData);
-
-      if (data.success) {
-        toast.success(data.message);
-        // Optionally auto-login or switch to login screen
-        setState("Login");
-        setIsTextDataSubmited(false);
-        setName("");
-        setEmail("");
-        setPassword("");
-        setImage(null);
-      } else {
-        toast.error(data.message);
-      }
+        }
     }
-
-  } catch (error) {
-    toast.error(error.message);
-  }
-};
-
     useEffect(()=>{
         document.body.style.overflow='hidden'
         return()=>{
