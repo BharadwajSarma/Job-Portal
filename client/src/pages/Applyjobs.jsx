@@ -77,7 +77,7 @@ const Applyjobs = () => {
     
   },[id]);
   useEffect (()=>{
-    if(userApplication && JobData ){
+    if(userApplication.length >0 && JobData ){
       checkAlreadyApplied()
     }
   },[JobData,userApplication,id])
