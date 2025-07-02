@@ -54,7 +54,9 @@ const Applyjobs = () => {
       )
       if(data.success){
         toast.success(data.message)
-        fetchUserApplications()
+       fetchUserApplications().then(() => {
+       checkAlreadyApplied()  // <<< Add this line
+  });
       }
       else{
         toast.error(data.message)
