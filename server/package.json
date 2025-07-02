@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^4.13.23",
     "@clerk/express": "^1.7.1",
     "@sentry/node": "^9.24.0",
     "@sentry/profiling-node": "^9.24.0",
