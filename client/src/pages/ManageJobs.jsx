@@ -9,7 +9,7 @@ import Loading from '../components/Loading'
 
 const ManageJobs = () => {
   const navigate = useNavigate()
-  const [jobs, setJobs] = useState([])
+  const [jobs, setJobs] = useState(false)
 
   const { backendUrl, companyToken } = useContext(AppContext)
   //Function to fetch company Job Application data

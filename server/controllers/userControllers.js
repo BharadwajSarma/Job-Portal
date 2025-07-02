@@ -26,7 +26,7 @@ export const applyForJob = async (req, res) => {
     const userId = req.auth.userId
     try {
         const isAlreadyApplied = await JobApplication.find({ jobId, userId })
-        if (isAlreadyApplied) {
+        if (isAlreadyApplied.length >0) {
             return res.json({ success: false, message: 'Already Applied' })
         }
         const jobData = await Job.findById(jobId)
