@@ -37,7 +37,7 @@ const RecruiterLogin = () => {
             }
 
         }catch(error){
-
+            toast.error(error.message)
         }
     }
     useEffect(()=>{
