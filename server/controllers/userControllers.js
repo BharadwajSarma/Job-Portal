@@ -5,34 +5,20 @@ import { v2 as cloudinary } from "cloudinary"
 import { clerkClient } from "@clerk/clerk-sdk-node";
 //Get user data
 export const getUserData = async (req, res) => {
-  const userId = req.auth.userId;
+    const userId = req.auth.userId
 
-  try {
-    let user = await User.findById(userId);
+    try {
+        const user = await User.findById(userId)
+        if (!user) {
+            return res.json({ success: false, message: "User Not Found" })
+        }
+        res.json({ success: true, user })
 
-    if (!user) {
-      // Auto-create new user using Clerk data
-      const clerkUser = await fetch(`https://api.clerk.dev/v1/users/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
-        },
-      }).then(res => res.json());
-
-      user = await User.create({
-        _id: userId,
-        name: clerkUser.first_name + ' ' + clerkUser.last_name,
-        email: clerkUser.email_addresses[0]?.email_address,
-        image: clerkUser.image_url,
-        resume: "", // default resume value
-      });
     }
-
-    res.json({ success: true, user });
-
-  } catch (error) {
-    res.json({ success: false, message: error.message });
-  }
-};
+    catch (error) {
+        res.json({ success: false, message: error.message })
+    }
+}
 //Apply for a job
 export const applyForJob = async (req, res) => {
     const { jobId } = req.body
