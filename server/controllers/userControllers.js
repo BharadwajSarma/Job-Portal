@@ -2,7 +2,6 @@ import Job from "../models/Job.js"
 import JobApplication from "../models/JobApplication.js"
 import User from "../models/User.js"
 import { v2 as cloudinary } from "cloudinary"
-import { clerkClient } from "@clerk/clerk-sdk-node";
 //Get user data
 export const getUserData = async (req, res) => {
     const userId = req.auth.userId
@@ -25,7 +24,7 @@ export const applyForJob = async (req, res) => {
     const userId = req.auth.userId
     try {
         const isAlreadyApplied = await JobApplication.find({ jobId, userId })
-        if (isAlreadyApplied.length >0) {
+        if (isAlreadyApplied >0) {
             return res.json({ success: false, message: 'Already Applied' })
         }
         const jobData = await Job.findById(jobId)
