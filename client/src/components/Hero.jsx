@@ -24,7 +24,7 @@ const Hero = () => {
         <p className='mb-8 max-w-xl mx-auto text-sm font-light px-5 '>Your Next Big Career Move Starts Right Here - Explore The Best Job Opportunities And Take The First Step Toward Your Future </p>
         <div className='flex items-center justify-between bg-white rounded text-gray-600 max-w-xl pl-4 mx-4 sm:mx-auto'>
           <div className='flex items-center'>
-            <img className='h-3 sm:h-5' src={assets.search_icon} alt="" />
+            <img className='h-4 sm:h-5' src={assets.search_icon} alt="" />
             <input type="text"
               placeholder='Search for jobs'
               className='max-sm:text-xs p-2 rounded outline-none w-full' 
