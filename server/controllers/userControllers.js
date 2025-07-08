@@ -8,6 +8,7 @@ export const getUserData = async (req, res) => {
 
     try {
         const user = await User.findById(userId)
+        console.log(user)
         if (!user) {
             return res.json({ success: false, message: "User Not Found" })
         }
